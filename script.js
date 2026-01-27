@@ -228,6 +228,83 @@ function showPost(postId) {
     }
 }
 
+// 다음 포스트 ID
+let nextPostId = 6;
+
+// 카테고리 이름 매핑
+const categoryNames = {
+    tech: '기술',
+    life: '일상',
+    travel: '여행'
+};
+
+// 사이드바에 글 목록 추가 함수
+function addPostToSidebar(postId, post) {
+    const postList = document.querySelector('.post-list');
+    const li = document.createElement('li');
+    li.className = 'post-item';
+    li.setAttribute('data-post', postId);
+    li.innerHTML = `
+        <span class="category-tag ${post.category}">${post.categoryName}</span>
+        <span class="post-title">${post.title}</span>
+        <span class="post-date">${post.date}</span>
+    `;
+    li.addEventListener('click', function() {
+        showPost(postId);
+    });
+    postList.insertBefore(li, postList.firstChild);
+}
+
+// 모달 열기
+function openModal() {
+    document.getElementById('write-modal').classList.add('active');
+}
+
+// 모달 닫기
+function closeModal() {
+    document.getElementById('write-modal').classList.remove('active');
+    document.getElementById('write-form').reset();
+}
+
+// 새 글 작성
+function createPost(title, category, content) {
+    const today = new Date();
+    const dateStr = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
+    const shortDateStr = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
+
+    // 읽기 시간 계산 (대략 200자당 1분)
+    const readTime = Math.max(1, Math.ceil(content.length / 200)) + '분 읽기';
+
+    // 내용을 HTML로 변환 (줄바꿈을 <p> 태그로)
+    const htmlContent = content
+        .split('\n\n')
+        .filter(p => p.trim())
+        .map(p => `<p>${p.trim()}</p>`)
+        .join('\n');
+
+    const newPost = {
+        title: title,
+        category: category,
+        categoryName: categoryNames[category],
+        date: dateStr,
+        shortDate: shortDateStr,
+        readTime: readTime,
+        image: `https://picsum.photos/800/400?random=${nextPostId + 10}`,
+        content: htmlContent
+    };
+
+    // posts 객체에 추가
+    posts[nextPostId] = newPost;
+
+    // 사이드바에 추가
+    addPostToSidebar(nextPostId, { ...newPost, date: shortDateStr });
+
+    // 새 글 표시
+    showPost(nextPostId);
+
+    nextPostId++;
+}
+
 // 이벤트 리스너 등록
 document.addEventListener('DOMContentLoaded', function() {
     // 첫 번째 글 표시
@@ -239,5 +316,38 @@ document.addEventListener('DOMContentLoaded', function() {
             const postId = this.getAttribute('data-post');
             showPost(postId);
         });
+    });
+
+    // 글쓰기 버튼 클릭
+    document.getElementById('write-btn').addEventListener('click', openModal);
+
+    // 모달 닫기 버튼
+    document.getElementById('close-modal').addEventListener('click', closeModal);
+    document.getElementById('cancel-btn').addEventListener('click', closeModal);
+
+    // 모달 바깥 클릭시 닫기
+    document.getElementById('write-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+
+    // ESC 키로 모달 닫기
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+
+    // 글 작성 폼 제출
+    document.getElementById('write-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const title = document.getElementById('post-title-input').value;
+        const category = document.getElementById('post-category').value;
+        const content = document.getElementById('post-body-input').value;
+
+        createPost(title, category, content);
+        closeModal();
     });
 });

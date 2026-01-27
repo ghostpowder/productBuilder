@@ -25,6 +25,7 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h2>글 목록</h2>
+                <button id="write-btn" class="write-btn">+ 새 글</button>
             </div>
             <ul class="post-list">
                 <li class="post-item active" data-post="1">
@@ -60,6 +61,38 @@
                 <!-- 글 내용이 여기에 표시됩니다 -->
             </article>
         </main>
+    </div>
+
+    <!-- 글쓰기 모달 -->
+    <div id="write-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>새 글 작성</h2>
+                <button id="close-modal" class="close-btn">&times;</button>
+            </div>
+            <form id="write-form">
+                <div class="form-group">
+                    <label for="post-title-input">제목</label>
+                    <input type="text" id="post-title-input" placeholder="글 제목을 입력하세요" required>
+                </div>
+                <div class="form-group">
+                    <label for="post-category">카테고리</label>
+                    <select id="post-category" required>
+                        <option value="tech">기술</option>
+                        <option value="life">일상</option>
+                        <option value="travel">여행</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="post-body-input">내용</label>
+                    <textarea id="post-body-input" rows="15" placeholder="글 내용을 입력하세요" required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancel-btn" class="btn btn-cancel">취소</button>
+                    <button type="submit" class="btn btn-submit">발행하기</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <footer>
