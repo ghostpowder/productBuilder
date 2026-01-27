@@ -1,20 +1,24 @@
-// 블로그 포스트 데이터
-const posts = {
-    1: {
+// 카테고리 이름 매핑
+const categoryNames = {
+    tech: '기술',
+    life: '일상',
+    travel: '여행'
+};
+
+// 기본 블로그 포스트 데이터
+const defaultPosts = [
+    {
+        id: 1,
         title: "웹 개발 시작하기: HTML과 CSS 기초",
-        category: "tech",
-        categoryName: "기술",
-        date: "2025년 1월 27일",
-        readTime: "5분 읽기",
-        image: "https://picsum.photos/800/400?random=1",
-        content: `
-            <p>웹 개발을 처음 시작하는 분들을 위한 HTML과 CSS의 기본 개념을 알아봅니다.</p>
+        tags: ["tech"],
+        date: "2025-01-27",
+        content: `<p>웹 개발을 처음 시작하는 분들을 위한 HTML과 CSS의 기본 개념을 알아봅니다.</p>
 
-            <h2>HTML이란?</h2>
-            <p>HTML(HyperText Markup Language)은 웹페이지의 구조를 정의하는 마크업 언어입니다. 웹페이지의 뼈대를 만드는 역할을 합니다.</p>
+<h2>HTML이란?</h2>
+<p>HTML(HyperText Markup Language)은 웹페이지의 구조를 정의하는 마크업 언어입니다. 웹페이지의 뼈대를 만드는 역할을 합니다.</p>
 
-            <h3>기본 HTML 구조</h3>
-            <pre><code>&lt;!DOCTYPE html&gt;
+<h3>기본 HTML 구조</h3>
+<pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
     &lt;title&gt;페이지 제목&lt;/title&gt;
@@ -25,192 +29,212 @@ const posts = {
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 
-            <h2>CSS란?</h2>
-            <p>CSS(Cascading Style Sheets)는 HTML 요소들의 스타일을 정의합니다. 색상, 크기, 레이아웃 등을 지정할 수 있습니다.</p>
+<h2>CSS란?</h2>
+<p>CSS(Cascading Style Sheets)는 HTML 요소들의 스타일을 정의합니다. 색상, 크기, 레이아웃 등을 지정할 수 있습니다.</p>
 
-            <h3>CSS 기본 문법</h3>
-            <pre><code>선택자 {
-    속성: 값;
-}
-
-/* 예시 */
-h1 {
-    color: blue;
-    font-size: 24px;
-}</code></pre>
-
-            <h2>마무리</h2>
-            <p>HTML과 CSS는 웹 개발의 기초입니다. 이 두 가지를 잘 이해하면 멋진 웹페이지를 만들 수 있습니다!</p>
-        `
+<h2>마무리</h2>
+<p>HTML과 CSS는 웹 개발의 기초입니다. 이 두 가지를 잘 이해하면 멋진 웹페이지를 만들 수 있습니다!</p>`
     },
-    2: {
+    {
+        id: 2,
         title: "새해 목표와 계획 세우기",
-        category: "life",
-        categoryName: "일상",
-        date: "2025년 1월 25일",
-        readTime: "3분 읽기",
-        image: "https://picsum.photos/800/400?random=2",
-        content: `
-            <p>2025년 새해를 맞이하여 올해의 목표와 계획을 정리해 보았습니다.</p>
+        tags: ["life"],
+        date: "2025-01-25",
+        content: `<p>2025년 새해를 맞이하여 올해의 목표와 계획을 정리해 보았습니다.</p>
 
-            <h2>2025년 목표</h2>
-            <ul>
-                <li>매일 30분 이상 운동하기</li>
-                <li>한 달에 책 2권 읽기</li>
-                <li>새로운 프로그래밍 언어 배우기</li>
-                <li>블로그 꾸준히 운영하기</li>
-            </ul>
+<h2>2025년 목표</h2>
+<ul>
+    <li>매일 30분 이상 운동하기</li>
+    <li>한 달에 책 2권 읽기</li>
+    <li>새로운 프로그래밍 언어 배우기</li>
+    <li>블로그 꾸준히 운영하기</li>
+</ul>
 
-            <h2>목표 달성을 위한 전략</h2>
-            <p>작심삼일이 되지 않으려면 구체적이고 측정 가능한 목표를 세워야 합니다.</p>
+<h2>목표 달성을 위한 전략</h2>
+<p>작심삼일이 되지 않으려면 구체적이고 측정 가능한 목표를 세워야 합니다.</p>
 
-            <h3>SMART 목표 설정법</h3>
-            <ul>
-                <li><strong>S</strong>pecific (구체적)</li>
-                <li><strong>M</strong>easurable (측정 가능)</li>
-                <li><strong>A</strong>chievable (달성 가능)</li>
-                <li><strong>R</strong>elevant (관련성 있는)</li>
-                <li><strong>T</strong>ime-bound (기한이 있는)</li>
-            </ul>
-
-            <p>올해는 이 원칙을 따라 목표를 세우고 꼭 달성해보려고 합니다!</p>
-        `
+<p>올해는 이 원칙을 따라 목표를 세우고 꼭 달성해보려고 합니다!</p>`
     },
-    3: {
+    {
+        id: 3,
         title: "JavaScript로 인터랙티브 웹 만들기",
-        category: "tech",
-        categoryName: "기술",
-        date: "2025년 1월 20일",
-        readTime: "7분 읽기",
-        image: "https://picsum.photos/800/400?random=3",
-        content: `
-            <p>JavaScript를 활용하여 동적인 웹페이지를 만드는 방법을 알아봅니다.</p>
+        tags: ["tech"],
+        date: "2025-01-20",
+        content: `<p>JavaScript를 활용하여 동적인 웹페이지를 만드는 방법을 알아봅니다.</p>
 
-            <h2>JavaScript란?</h2>
-            <p>JavaScript는 웹페이지에 동적인 기능을 추가하는 프로그래밍 언어입니다. 사용자와의 상호작용을 처리할 수 있습니다.</p>
+<h2>JavaScript란?</h2>
+<p>JavaScript는 웹페이지에 동적인 기능을 추가하는 프로그래밍 언어입니다. 사용자와의 상호작용을 처리할 수 있습니다.</p>
 
-            <h2>DOM 조작하기</h2>
-            <p>DOM(Document Object Model)을 통해 HTML 요소를 선택하고 수정할 수 있습니다.</p>
+<h2>DOM 조작하기</h2>
+<p>DOM(Document Object Model)을 통해 HTML 요소를 선택하고 수정할 수 있습니다.</p>
 
-            <pre><code>// 요소 선택
+<pre><code>// 요소 선택
 const element = document.querySelector('.my-class');
 
 // 내용 변경
 element.textContent = '새로운 내용';
-
-// 스타일 변경
-element.style.color = 'red';
 
 // 클릭 이벤트 추가
 element.addEventListener('click', function() {
     alert('클릭되었습니다!');
 });</code></pre>
 
-            <h2>이벤트 처리</h2>
-            <p>사용자의 클릭, 키보드 입력, 마우스 움직임 등 다양한 이벤트를 처리할 수 있습니다.</p>
-
-            <h3>자주 사용하는 이벤트</h3>
-            <ul>
-                <li><code>click</code> - 클릭</li>
-                <li><code>mouseover</code> - 마우스 오버</li>
-                <li><code>keydown</code> - 키 누름</li>
-                <li><code>submit</code> - 폼 제출</li>
-            </ul>
-
-            <p>JavaScript를 배우면 웹페이지를 훨씬 더 풍부하게 만들 수 있습니다!</p>
-        `
+<p>JavaScript를 배우면 웹페이지를 훨씬 더 풍부하게 만들 수 있습니다!</p>`
     },
-    4: {
+    {
+        id: 4,
         title: "제주도 겨울 여행 후기",
-        category: "travel",
-        categoryName: "여행",
-        date: "2025년 1월 15일",
-        readTime: "4분 읽기",
-        image: "https://picsum.photos/800/400?random=4",
-        content: `
-            <p>겨울의 제주도는 또 다른 매력이 있습니다. 이번 여행에서 경험한 것들을 공유합니다.</p>
+        tags: ["travel", "life"],
+        date: "2025-01-15",
+        content: `<p>겨울의 제주도는 또 다른 매력이 있습니다. 이번 여행에서 경험한 것들을 공유합니다.</p>
 
-            <h2>방문한 곳</h2>
+<h2>방문한 곳</h2>
 
-            <h3>1. 성산일출봉</h3>
-            <p>겨울 새벽의 일출은 정말 장관이었습니다. 추웠지만 그만한 가치가 있었어요.</p>
+<h3>1. 성산일출봉</h3>
+<p>겨울 새벽의 일출은 정말 장관이었습니다. 추웠지만 그만한 가치가 있었어요.</p>
 
-            <h3>2. 우도</h3>
-            <p>한적한 겨울의 우도는 여유롭게 자전거를 타며 둘러보기 좋았습니다.</p>
+<h3>2. 우도</h3>
+<p>한적한 겨울의 우도는 여유롭게 자전거를 타며 둘러보기 좋았습니다.</p>
 
-            <h3>3. 협재 해변</h3>
-            <p>겨울 바다의 고요함과 에메랄드빛 물빛이 인상적이었습니다.</p>
+<h2>맛집 추천</h2>
+<ul>
+    <li>고기국수 - 제주 전통 음식</li>
+    <li>흑돼지 구이 - 꼭 먹어봐야 할 메뉴</li>
+    <li>귤 디저트 - 겨울 제주의 특별함</li>
+</ul>
 
-            <h2>맛집 추천</h2>
-            <ul>
-                <li>고기국수 - 제주 전통 음식</li>
-                <li>흑돼지 구이 - 꼭 먹어봐야 할 메뉴</li>
-                <li>귤 디저트 - 겨울 제주의 특별함</li>
-            </ul>
-
-            <h2>여행 팁</h2>
-            <p>겨울 제주는 바람이 강하니 따뜻한 옷을 꼭 챙기세요. 렌터카는 필수입니다!</p>
-        `
+<p>겨울 제주는 바람이 강하니 따뜻한 옷을 꼭 챙기세요!</p>`
     },
-    5: {
+    {
+        id: 5,
         title: "Git과 GitHub 사용법",
-        category: "tech",
-        categoryName: "기술",
-        date: "2025년 1월 10일",
-        readTime: "6분 읽기",
-        image: "https://picsum.photos/800/400?random=5",
-        content: `
-            <p>개발자라면 반드시 알아야 할 Git과 GitHub의 기본 사용법을 정리했습니다.</p>
+        tags: ["tech"],
+        date: "2025-01-10",
+        content: `<p>개발자라면 반드시 알아야 할 Git과 GitHub의 기본 사용법을 정리했습니다.</p>
 
-            <h2>Git이란?</h2>
-            <p>Git은 분산 버전 관리 시스템입니다. 코드의 변경 이력을 추적하고 여러 사람이 협업할 수 있게 해줍니다.</p>
+<h2>Git이란?</h2>
+<p>Git은 분산 버전 관리 시스템입니다. 코드의 변경 이력을 추적하고 여러 사람이 협업할 수 있게 해줍니다.</p>
 
-            <h2>기본 명령어</h2>
+<h2>기본 명령어</h2>
+<pre><code>git init
+git add .
+git commit -m "커밋 메시지"
+git push origin main</code></pre>
 
-            <h3>저장소 초기화</h3>
-            <pre><code>git init</code></pre>
+<h2>GitHub란?</h2>
+<p>GitHub는 Git 저장소를 호스팅하는 웹 서비스입니다. 코드를 온라인에 저장하고 다른 개발자들과 공유할 수 있습니다.</p>
 
-            <h3>파일 추가 및 커밋</h3>
-            <pre><code>git add .
-git commit -m "커밋 메시지"</code></pre>
-
-            <h3>원격 저장소 연결</h3>
-            <pre><code>git remote add origin [URL]
-git push -u origin main</code></pre>
-
-            <h2>GitHub란?</h2>
-            <p>GitHub는 Git 저장소를 호스팅하는 웹 서비스입니다. 코드를 온라인에 저장하고 다른 개발자들과 공유할 수 있습니다.</p>
-
-            <h3>주요 기능</h3>
-            <ul>
-                <li>코드 저장소 호스팅</li>
-                <li>Pull Request를 통한 코드 리뷰</li>
-                <li>Issue 트래킹</li>
-                <li>GitHub Actions (CI/CD)</li>
-            </ul>
-
-            <p>Git과 GitHub를 잘 활용하면 효율적인 개발이 가능합니다!</p>
-        `
+<p>Git과 GitHub를 잘 활용하면 효율적인 개발이 가능합니다!</p>`
     }
-};
+];
 
-// 포스트 표시 함수
-function showPost(postId) {
-    const post = posts[postId];
-    if (!post) return;
+// 포스트 데이터 가져오기
+function getPosts() {
+    let savedPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
+    return [...savedPosts, ...defaultPosts];
+}
 
+// 날짜 포맷팅
+function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+}
+
+function formatShortDate(dateStr) {
+    const date = new Date(dateStr);
+    return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+}
+
+// 읽기 시간 계산
+function calcReadTime(content) {
+    const text = content.replace(/<[^>]*>/g, '');
+    return Math.max(1, Math.ceil(text.length / 200)) + '분 읽기';
+}
+
+// 현재 카테고리 필터 가져오기
+function getCurrentCategory() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('category') || 'all';
+}
+
+// 글 목록 렌더링
+function renderPostList() {
+    const postList = document.getElementById('post-list');
+    if (!postList) return;
+
+    const posts = getPosts();
+    const currentCategory = getCurrentCategory();
+
+    // 카테고리 필터링
+    const filteredPosts = currentCategory === 'all'
+        ? posts
+        : posts.filter(post => post.tags.includes(currentCategory));
+
+    // 날짜순 정렬 (최신순)
+    filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    postList.innerHTML = '';
+
+    filteredPosts.forEach((post, index) => {
+        const li = document.createElement('li');
+        li.className = 'post-item' + (index === 0 ? ' active' : '');
+        li.setAttribute('data-post-id', post.id || `new-${index}`);
+
+        const tagsHtml = post.tags.map(tag =>
+            `<span class="category-tag ${tag}">${categoryNames[tag]}</span>`
+        ).join('');
+
+        li.innerHTML = `
+            <div class="post-tags">${tagsHtml}</div>
+            <span class="post-title">${post.title}</span>
+            <span class="post-date">${formatShortDate(post.date)}</span>
+        `;
+
+        li.addEventListener('click', () => showPost(post));
+        postList.appendChild(li);
+    });
+
+    // 첫 번째 글 표시
+    if (filteredPosts.length > 0) {
+        showPost(filteredPosts[0]);
+    } else {
+        document.getElementById('post-content').innerHTML = '<p style="text-align:center;color:#888;padding:3rem;">해당 카테고리에 글이 없습니다.</p>';
+    }
+
+    // 네비게이션 활성화 상태 업데이트
+    updateNavActive();
+}
+
+// 네비게이션 활성화 상태 업데이트
+function updateNavActive() {
+    const currentCategory = getCurrentCategory();
+    document.querySelectorAll('.nav-tag').forEach(tag => {
+        tag.classList.remove('active');
+        if (tag.dataset.category === currentCategory) {
+            tag.classList.add('active');
+        }
+    });
+}
+
+// 포스트 표시
+function showPost(post) {
     const postContent = document.getElementById('post-content');
+    if (!postContent) return;
+
+    const tagsHtml = post.tags.map(tag =>
+        `<span class="category-tag ${tag}">${categoryNames[tag]}</span>`
+    ).join('');
 
     postContent.innerHTML = `
         <div class="post-header">
-            <span class="category-tag ${post.category}">${post.categoryName}</span>
+            <div class="post-tags">${tagsHtml}</div>
             <h1>${post.title}</h1>
             <div class="post-meta">
-                <span class="date">${post.date}</span>
-                <span class="read-time">${post.readTime}</span>
+                <span class="date">${formatDate(post.date)}</span>
+                <span class="read-time">${calcReadTime(post.content)}</span>
             </div>
         </div>
-        <img src="${post.image}" alt="${post.title}" class="post-image">
+        <img src="https://picsum.photos/800/400?random=${post.id || Math.random()}" alt="${post.title}" class="post-image">
         <div class="post-body">
             ${post.content}
         </div>
@@ -220,7 +244,8 @@ function showPost(postId) {
     document.querySelectorAll('.post-item').forEach(item => {
         item.classList.remove('active');
     });
-    document.querySelector(`[data-post="${postId}"]`).classList.add('active');
+    const activeItem = document.querySelector(`[data-post-id="${post.id || `new-${post.title}`}"]`);
+    if (activeItem) activeItem.classList.add('active');
 
     // 모바일에서 스크롤 이동
     if (window.innerWidth <= 768) {
@@ -228,126 +253,24 @@ function showPost(postId) {
     }
 }
 
-// 다음 포스트 ID
-let nextPostId = 6;
-
-// 카테고리 이름 매핑
-const categoryNames = {
-    tech: '기술',
-    life: '일상',
-    travel: '여행'
-};
-
-// 사이드바에 글 목록 추가 함수
-function addPostToSidebar(postId, post) {
-    const postList = document.querySelector('.post-list');
-    const li = document.createElement('li');
-    li.className = 'post-item';
-    li.setAttribute('data-post', postId);
-    li.innerHTML = `
-        <span class="category-tag ${post.category}">${post.categoryName}</span>
-        <span class="post-title">${post.title}</span>
-        <span class="post-date">${post.date}</span>
-    `;
-    li.addEventListener('click', function() {
-        showPost(postId);
-    });
-    postList.insertBefore(li, postList.firstChild);
-}
-
-// 모달 열기
-function openModal() {
-    document.getElementById('write-modal').classList.add('active');
-}
-
-// 모달 닫기
-function closeModal() {
-    document.getElementById('write-modal').classList.remove('active');
-    document.getElementById('write-form').reset();
-}
-
-// 새 글 작성
-function createPost(title, category, content) {
-    const today = new Date();
-    const dateStr = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
-    const shortDateStr = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
-
-    // 읽기 시간 계산 (대략 200자당 1분)
-    const readTime = Math.max(1, Math.ceil(content.length / 200)) + '분 읽기';
-
-    // 내용을 HTML로 변환 (줄바꿈을 <p> 태그로)
-    const htmlContent = content
-        .split('\n\n')
-        .filter(p => p.trim())
-        .map(p => `<p>${p.trim()}</p>`)
-        .join('\n');
-
-    const newPost = {
-        title: title,
-        category: category,
-        categoryName: categoryNames[category],
-        date: dateStr,
-        shortDate: shortDateStr,
-        readTime: readTime,
-        image: `https://picsum.photos/800/400?random=${nextPostId + 10}`,
-        content: htmlContent
-    };
-
-    // posts 객체에 추가
-    posts[nextPostId] = newPost;
-
-    // 사이드바에 추가
-    addPostToSidebar(nextPostId, { ...newPost, date: shortDateStr });
-
-    // 새 글 표시
-    showPost(nextPostId);
-
-    nextPostId++;
-}
-
-// 이벤트 리스너 등록
+// 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
-    // 첫 번째 글 표시
-    showPost(1);
+    // index.html 페이지인 경우에만 실행
+    if (document.getElementById('post-list')) {
+        renderPostList();
 
-    // 글 목록 클릭 이벤트
-    document.querySelectorAll('.post-item').forEach(item => {
-        item.addEventListener('click', function() {
-            const postId = this.getAttribute('data-post');
-            showPost(postId);
+        // 카테고리 네비게이션 클릭 이벤트 (페이지 새로고침 없이)
+        document.querySelectorAll('.nav-tag').forEach(tag => {
+            tag.addEventListener('click', function(e) {
+                e.preventDefault();
+                const category = this.dataset.category;
+                const url = category === 'all' ? 'index.html' : `index.html?category=${category}`;
+                history.pushState({}, '', url);
+                renderPostList();
+            });
         });
-    });
 
-    // 글쓰기 버튼 클릭
-    document.getElementById('write-btn').addEventListener('click', openModal);
-
-    // 모달 닫기 버튼
-    document.getElementById('close-modal').addEventListener('click', closeModal);
-    document.getElementById('cancel-btn').addEventListener('click', closeModal);
-
-    // 모달 바깥 클릭시 닫기
-    document.getElementById('write-modal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeModal();
-        }
-    });
-
-    // ESC 키로 모달 닫기
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeModal();
-        }
-    });
-
-    // 글 작성 폼 제출
-    document.getElementById('write-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const title = document.getElementById('post-title-input').value;
-        const category = document.getElementById('post-category').value;
-        const content = document.getElementById('post-body-input').value;
-
-        createPost(title, category, content);
-        closeModal();
-    });
+        // 브라우저 뒤로가기/앞으로가기 처리
+        window.addEventListener('popstate', renderPostList);
+    }
 });

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>새 글 작성 - My Blog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1 class="logo"><a href="index.html">My Blog</a></h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">홈</a></li>
+                    <li><a href="index.html?category=tech">기술</a></li>
+                    <li><a href="index.html?category=life">일상</a></li>
+                    <li><a href="index.html?category=travel">여행</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="write-container">
+        <div class="write-page">
+            <div class="write-header">
+                <h1>새 글 작성</h1>
+            </div>
+
+            <form id="write-form">
+                <div class="form-group">
+                    <label for="post-title-input">제목</label>
+                    <input type="text" id="post-title-input" placeholder="글 제목을 입력하세요" required>
+                </div>
+
+                <div class="form-group">
+                    <label>카테고리</label>
+                    <div class="tag-selector">
+                        <input type="checkbox" id="tag-tech" name="category" value="tech">
+                        <label for="tag-tech" class="tag-label tech">기술</label>
+
+                        <input type="checkbox" id="tag-life" name="category" value="life">
+                        <label for="tag-life" class="tag-label life">일상</label>
+
+                        <input type="checkbox" id="tag-travel" name="category" value="travel">
+                        <label for="tag-travel" class="tag-label travel">여행</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-body-input">내용</label>
+                    <textarea id="post-body-input" rows="20" placeholder="글 내용을 입력하세요" required></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <a href="index.html" class="btn btn-cancel">취소</a>
+                    <button type="submit" class="btn btn-submit">발행하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 My Blog. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // 글쓰기 페이지 전용 스크립트
+        document.getElementById('write-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('post-title-input').value;
+            const content = document.getElementById('post-body-input').value;
+
+            // 선택된 태그들 가져오기
+            const selectedTags = [];
+            document.querySelectorAll('.tag-selector input:checked').forEach(input => {
+                selectedTags.push(input.value);
+            });
+
+            if (selectedTags.length === 0) {
+                alert('카테고리를 하나 이상 선택해주세요.');
+                return;
+            }
+
+            // localStorage에 새 글 저장
+            const newPost = {
+                title: title,
+                tags: selectedTags,
+                content: content,
+                date: new Date().toISOString()
+            };
+
+            let savedPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
+            savedPosts.unshift(newPost);
+            localStorage.setItem('blogPosts', JSON.stringify(savedPosts));
+
+            // 메인 페이지로 이동
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

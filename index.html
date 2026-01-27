@@ -9,14 +9,12 @@
 <body>
     <header>
         <div class="header-content">
-            <h1 class="logo">My Blog</h1>
-            <nav>
-                <ul>
-                    <li><a href="#" class="active">홈</a></li>
-                    <li><a href="#">기술</a></li>
-                    <li><a href="#">일상</a></li>
-                    <li><a href="#">소개</a></li>
-                </ul>
+            <h1 class="logo"><a href="index.html">My Blog</a></h1>
+            <nav class="tag-nav">
+                <a href="index.html" class="nav-tag all active" data-category="all">전체</a>
+                <a href="index.html?category=tech" class="nav-tag tech" data-category="tech">기술</a>
+                <a href="index.html?category=life" class="nav-tag life" data-category="life">일상</a>
+                <a href="index.html?category=travel" class="nav-tag travel" data-category="travel">여행</a>
             </nav>
         </div>
     </header>
@@ -25,34 +23,10 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h2>글 목록</h2>
-                <button id="write-btn" class="write-btn">+ 새 글</button>
+                <a href="write.html" class="write-btn">+ 새 글</a>
             </div>
-            <ul class="post-list">
-                <li class="post-item active" data-post="1">
-                    <span class="category-tag tech">기술</span>
-                    <span class="post-title">웹 개발 시작하기: HTML과 CSS 기초</span>
-                    <span class="post-date">2025.01.27</span>
-                </li>
-                <li class="post-item" data-post="2">
-                    <span class="category-tag life">일상</span>
-                    <span class="post-title">새해 목표와 계획 세우기</span>
-                    <span class="post-date">2025.01.25</span>
-                </li>
-                <li class="post-item" data-post="3">
-                    <span class="category-tag tech">기술</span>
-                    <span class="post-title">JavaScript로 인터랙티브 웹 만들기</span>
-                    <span class="post-date">2025.01.20</span>
-                </li>
-                <li class="post-item" data-post="4">
-                    <span class="category-tag travel">여행</span>
-                    <span class="post-title">제주도 겨울 여행 후기</span>
-                    <span class="post-date">2025.01.15</span>
-                </li>
-                <li class="post-item" data-post="5">
-                    <span class="category-tag tech">기술</span>
-                    <span class="post-title">Git과 GitHub 사용법</span>
-                    <span class="post-date">2025.01.10</span>
-                </li>
+            <ul class="post-list" id="post-list">
+                <!-- 글 목록이 JavaScript로 렌더링됩니다 -->
             </ul>
         </aside>
 
@@ -61,38 +35,6 @@
                 <!-- 글 내용이 여기에 표시됩니다 -->
             </article>
         </main>
-    </div>
-
-    <!-- 글쓰기 모달 -->
-    <div id="write-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>새 글 작성</h2>
-                <button id="close-modal" class="close-btn">&times;</button>
-            </div>
-            <form id="write-form">
-                <div class="form-group">
-                    <label for="post-title-input">제목</label>
-                    <input type="text" id="post-title-input" placeholder="글 제목을 입력하세요" required>
-                </div>
-                <div class="form-group">
-                    <label for="post-category">카테고리</label>
-                    <select id="post-category" required>
-                        <option value="tech">기술</option>
-                        <option value="life">일상</option>
-                        <option value="travel">여행</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="post-body-input">내용</label>
-                    <textarea id="post-body-input" rows="15" placeholder="글 내용을 입력하세요" required></textarea>
-                </div>
-                <div class="form-actions">
-                    <button type="button" id="cancel-btn" class="btn btn-cancel">취소</button>
-                    <button type="submit" class="btn btn-submit">발행하기</button>
-                </div>
-            </form>
-        </div>
     </div>
 
     <footer>
