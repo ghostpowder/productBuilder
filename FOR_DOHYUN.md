@@ -4,7 +4,7 @@
 
 ## 🎯 프로젝트 한 줄 요약
 
-순수 HTML/CSS/JavaScript로 만든 **개인 블로그 웹사이트**. 글 목록, 글 보기, 글쓰기 기능을 갖추고 있으며, 카테고리 태그 필터링과 localStorage를 활용한 데이터 저장을 지원한다.
+순수 HTML/CSS/JavaScript로 만든 **개인 블로그 웹사이트**. 글 목록, 글 보기, 글쓰기, 수정/삭제, 댓글, 이미지 업로드 기능을 갖추고 있으며, 카테고리 태그 필터링과 localStorage를 활용한 데이터 저장을 지원한다.
 
 ---
 
@@ -95,6 +95,11 @@ showPost(첫 번째 글) 호출
 사용자가 write.html에서 글 작성
         │
         ▼
+이미지 선택 (선택사항)
+        │
+        ├──▶ FileReader로 Base64 변환
+        │
+        ▼
 폼 제출 (submit 이벤트)
         │
         ▼
@@ -106,6 +111,7 @@ showPost(첫 번째 글) 호출
   title: "제목",
   tags: ["tech", "life"],
   content: "내용...",
+  image: "data:image/...",  // Base64 이미지 (선택)
   date: "2025-01-27"
 }
         │
@@ -117,6 +123,33 @@ index.html로 리다이렉트
         │
         ▼
 새 글이 목록 최상단에 표시! ✨
+```
+
+### 3. 댓글 작성 시
+
+```
+사용자가 글 하단 댓글 폼에서 작성
+        │
+        ▼
+폼 제출 (submit 이벤트)
+        │
+        ▼
+댓글 객체 생성
+{
+  id: "comment-1234567890",
+  author: "작성자",
+  content: "댓글 내용",
+  date: "2025-01-28T..."
+}
+        │
+        ▼
+blogComments에 저장 (postId별로 분류)
+        │
+        ▼
+댓글 섹션 다시 렌더링
+        │
+        ▼
+새 댓글 표시! 💬
 ```
 
 ---
@@ -164,16 +197,26 @@ posts.forEach(post => {
 **왜?** 서버 없이 데이터를 영구 저장할 수 있다.
 
 ```javascript
-// 저장
+// 글 저장
 localStorage.setItem('blogPosts', JSON.stringify(posts));
 
-// 불러오기
+// 글 불러오기
 const posts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
+
+// 댓글 저장 (글별로 분류)
+const allComments = { 'post-id-1': [...], 'post-id-2': [...] };
+localStorage.setItem('blogComments', JSON.stringify(allComments));
 ```
+
+**저장되는 데이터**:
+- `blogPosts`: 모든 글 데이터 (제목, 내용, 태그, 이미지 등)
+- `blogComments`: 글별 댓글 데이터
+- `blogInitialized`: 초기화 여부 플래그
+- `commentAuthor`: 마지막 댓글 작성자 이름 (자동 입력용)
 
 **한계점**:
 - 브라우저별로 독립적 (다른 브라우저에서는 안 보임)
-- 용량 제한 (약 5MB)
+- 용량 제한 (약 5MB) - 이미지는 2MB 이하로 제한
 - 보안에 민감한 데이터는 저장하면 안 됨
 
 ---
@@ -413,9 +456,10 @@ document.querySelector('.post-list').addEventListener('click', (e) => {
 이 프로젝트를 확장한다면:
 
 ### Level 1: 기능 추가
-- [ ] 글 수정/삭제 기능
+- [x] 글 수정/삭제 기능 ✅
+- [x] 댓글 기능 (localStorage) ✅
+- [x] 이미지 업로드 기능 ✅
 - [ ] 검색 기능
-- [ ] 댓글 기능 (localStorage)
 
 ### Level 2: 기술 업그레이드
 - [ ] TypeScript 적용
@@ -452,5 +496,5 @@ document.querySelector('.post-list').addEventListener('click', (e) => {
 
 ---
 
-*이 문서는 2025년 1월 27일에 작성되었습니다.*
+*이 문서는 2025년 1월 28일에 업데이트되었습니다.*
 *프로젝트 GitHub: https://github.com/ghostpowder/productBuilder*
