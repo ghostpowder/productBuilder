@@ -5,6 +5,152 @@ const categoryNames = {
     travel: '여행'
 };
 
+// ========== 댓글 관련 함수 ==========
+
+// 댓글 데이터 가져오기
+function getComments(postId) {
+    const allComments = JSON.parse(localStorage.getItem('blogComments') || '{}');
+    return allComments[postId] || [];
+}
+
+// 댓글 저장하기
+function saveComment(postId, comment) {
+    const allComments = JSON.parse(localStorage.getItem('blogComments') || '{}');
+    if (!allComments[postId]) {
+        allComments[postId] = [];
+    }
+    allComments[postId].push(comment);
+    localStorage.setItem('blogComments', JSON.stringify(allComments));
+}
+
+// 댓글 삭제하기
+function deleteComment(postId, commentId) {
+    const allComments = JSON.parse(localStorage.getItem('blogComments') || '{}');
+    if (allComments[postId]) {
+        allComments[postId] = allComments[postId].filter(c => c.id !== commentId);
+        localStorage.setItem('blogComments', JSON.stringify(allComments));
+    }
+}
+
+// 댓글 시간 포맷팅
+function formatCommentDate(dateStr) {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diff = now - date;
+
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+
+    if (minutes < 1) return '방금 전';
+    if (minutes < 60) return `${minutes}분 전`;
+    if (hours < 24) return `${hours}시간 전`;
+    if (days < 7) return `${days}일 전`;
+
+    return formatShortDate(dateStr);
+}
+
+// 댓글 섹션 렌더링
+function renderComments(postId) {
+    const comments = getComments(postId);
+    const commentsHtml = comments.map(comment => `
+        <div class="comment-item" data-comment-id="${comment.id}">
+            <div class="comment-header">
+                <span class="comment-author">${escapeHtml(comment.author)}</span>
+                <span class="comment-date">${formatCommentDate(comment.date)}</span>
+                <button class="comment-delete-btn" onclick="handleDeleteComment('${postId}', '${comment.id}')" title="삭제">×</button>
+            </div>
+            <div class="comment-content">${escapeHtml(comment.content)}</div>
+        </div>
+    `).join('');
+
+    return `
+        <div class="comments-section">
+            <h3 class="comments-title">댓글 <span class="comment-count">${comments.length}</span></h3>
+
+            <form class="comment-form" onsubmit="handleCommentSubmit(event, '${postId}')">
+                <div class="comment-form-row">
+                    <input type="text" class="comment-author-input" placeholder="이름" required maxlength="20">
+                </div>
+                <div class="comment-form-row">
+                    <textarea class="comment-content-input" placeholder="댓글을 입력하세요..." required maxlength="500"></textarea>
+                </div>
+                <div class="comment-form-actions">
+                    <button type="submit" class="comment-submit-btn">댓글 작성</button>
+                </div>
+            </form>
+
+            <div class="comments-list">
+                ${comments.length > 0 ? commentsHtml : '<p class="no-comments">아직 댓글이 없습니다. 첫 번째 댓글을 작성해보세요!</p>'}
+            </div>
+        </div>
+    `;
+}
+
+// HTML 이스케이프 (XSS 방지)
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// 댓글 작성 핸들러
+function handleCommentSubmit(event, postId) {
+    event.preventDefault();
+
+    const form = event.target;
+    const authorInput = form.querySelector('.comment-author-input');
+    const contentInput = form.querySelector('.comment-content-input');
+
+    const comment = {
+        id: 'comment-' + Date.now(),
+        author: authorInput.value.trim(),
+        content: contentInput.value.trim(),
+        date: new Date().toISOString()
+    };
+
+    saveComment(postId, comment);
+
+    // 폼 초기화
+    contentInput.value = '';
+
+    // 작성자 이름 저장 (다음 댓글 작성 시 자동 입력)
+    localStorage.setItem('commentAuthor', comment.author);
+
+    // 댓글 섹션 다시 렌더링
+    const commentsSection = document.querySelector('.comments-section');
+    if (commentsSection) {
+        commentsSection.outerHTML = renderComments(postId);
+        // 저장된 작성자 이름 복원
+        restoreCommentAuthor();
+    }
+}
+
+// 댓글 삭제 핸들러
+function handleDeleteComment(postId, commentId) {
+    if (!confirm('이 댓글을 삭제하시겠습니까?')) return;
+
+    deleteComment(postId, commentId);
+
+    // 댓글 섹션 다시 렌더링
+    const commentsSection = document.querySelector('.comments-section');
+    if (commentsSection) {
+        commentsSection.outerHTML = renderComments(postId);
+        restoreCommentAuthor();
+    }
+}
+
+// 저장된 작성자 이름 복원
+function restoreCommentAuthor() {
+    const savedAuthor = localStorage.getItem('commentAuthor');
+    if (savedAuthor) {
+        const authorInput = document.querySelector('.comment-author-input');
+        if (authorInput) {
+            authorInput.value = savedAuthor;
+        }
+    }
+}
+
 // 기본 블로그 포스트 데이터
 const defaultPosts = [
     {
@@ -157,12 +303,6 @@ function formatShortDate(dateStr) {
     return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
 }
 
-// 읽기 시간 계산
-function calcReadTime(content) {
-    const text = content.replace(/<[^>]*>/g, '');
-    return Math.max(1, Math.ceil(text.length / 200)) + '분 읽기';
-}
-
 // 현재 카테고리 필터 가져오기
 function getCurrentCategory() {
     const params = new URLSearchParams(window.location.search);
@@ -275,14 +415,17 @@ function showPost(post) {
             <h1>${post.title}</h1>
             <div class="post-meta">
                 <span class="date">${formatDate(post.date)}</span>
-                <span class="read-time">${calcReadTime(post.content)}</span>
             </div>
         </div>
-        <img src="https://picsum.photos/800/400?random=${post.id || Math.random()}" alt="${post.title}" class="post-image">
+        ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image">` : ''}
         <div class="post-body">
             ${post.content}
         </div>
+        ${renderComments(post.id)}
     `;
+
+    // 저장된 작성자 이름 복원
+    restoreCommentAuthor();
 
     // 활성 상태 업데이트
     document.querySelectorAll('.post-item').forEach(item => {

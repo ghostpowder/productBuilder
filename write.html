@@ -10,13 +10,11 @@
     <header>
         <div class="header-content">
             <h1 class="logo"><a href="index.html">My Blog</a></h1>
-            <nav>
-                <ul>
-                    <li><a href="index.html">홈</a></li>
-                    <li><a href="index.html?category=tech">기술</a></li>
-                    <li><a href="index.html?category=life">일상</a></li>
-                    <li><a href="index.html?category=travel">여행</a></li>
-                </ul>
+            <nav class="tag-nav">
+                <a href="index.html" class="nav-tag all">전체</a>
+                <a href="index.html?category=tech" class="nav-tag tech">기술</a>
+                <a href="index.html?category=life" class="nav-tag life">일상</a>
+                <a href="index.html?category=travel" class="nav-tag travel">여행</a>
             </nav>
         </div>
     </header>
@@ -48,6 +46,17 @@
                 </div>
 
                 <div class="form-group">
+                    <label>대표 이미지</label>
+                    <div class="image-upload-area" id="image-upload-area">
+                        <input type="file" id="image-input" accept="image/*" hidden>
+                        <div class="image-preview" id="image-preview">
+                            <span class="upload-placeholder">클릭하여 이미지 선택</span>
+                        </div>
+                        <button type="button" class="btn-remove-image" id="btn-remove-image" style="display:none;">이미지 삭제</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="post-body-input">내용</label>
                     <textarea id="post-body-input" rows="20" placeholder="글 내용을 입력하세요" required></textarea>
                 </div>
@@ -70,6 +79,42 @@
         const urlParams = new URLSearchParams(window.location.search);
         const editId = urlParams.get('edit');
         let isEditMode = false;
+        let currentImage = null;
+
+        // 이미지 업로드 관련 요소
+        const imageInput = document.getElementById('image-input');
+        const imagePreview = document.getElementById('image-preview');
+        const imageUploadArea = document.getElementById('image-upload-area');
+        const btnRemoveImage = document.getElementById('btn-remove-image');
+
+        // 이미지 프리뷰 클릭 시 파일 선택
+        imagePreview.addEventListener('click', () => imageInput.click());
+
+        // 이미지 선택 시 프리뷰 표시
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('이미지 크기는 2MB 이하여야 합니다.');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImage = e.target.result;
+                    imagePreview.innerHTML = `<img src="${currentImage}" alt="미리보기">`;
+                    btnRemoveImage.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 이미지 삭제
+        btnRemoveImage.addEventListener('click', function() {
+            currentImage = null;
+            imageInput.value = '';
+            imagePreview.innerHTML = '<span class="upload-placeholder">클릭하여 이미지 선택</span>';
+            btnRemoveImage.style.display = 'none';
+        });
 
         // 편집 모드일 경우 기존 글 불러오기
         if (editId) {
@@ -87,6 +132,13 @@
                     const checkbox = document.getElementById(`tag-${tag}`);
                     if (checkbox) checkbox.checked = true;
                 });
+
+                // 기존 이미지 불러오기
+                if (postToEdit.image) {
+                    currentImage = postToEdit.image;
+                    imagePreview.innerHTML = `<img src="${currentImage}" alt="미리보기">`;
+                    btnRemoveImage.style.display = 'block';
+                }
 
                 // 버튼 텍스트 변경
                 document.querySelector('.btn-submit').textContent = '수정하기';
@@ -121,7 +173,8 @@
                         ...savedPosts[index],
                         title: title,
                         tags: selectedTags,
-                        content: content
+                        content: content,
+                        image: currentImage
                     };
                 }
             } else {
@@ -131,6 +184,7 @@
                     title: title,
                     tags: selectedTags,
                     content: content,
+                    image: currentImage,
                     date: new Date().toISOString()
                 };
                 savedPosts.unshift(newPost);
