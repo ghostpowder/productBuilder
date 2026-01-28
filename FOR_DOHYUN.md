@@ -41,7 +41,7 @@
 ## 📁 코드베이스 구조: 지도 그리기
 
 ```
-my-first-project/
+web-project/
 │
 ├── index.html          # 🏠 메인 페이지 (글 목록 + 본문)
 ├── write.html          # ✍️ 글쓰기 페이지

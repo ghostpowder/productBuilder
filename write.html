@@ -24,7 +24,7 @@
     <div class="write-container">
         <div class="write-page">
             <div class="write-header">
-                <h1>새 글 작성</h1>
+                <h1 id="page-title">새 글 작성</h1>
             </div>
 
             <form id="write-form">
@@ -66,7 +66,34 @@
 
     <script src="script.js"></script>
     <script>
-        // 글쓰기 페이지 전용 스크립트
+        // 편집 모드 확인
+        const urlParams = new URLSearchParams(window.location.search);
+        const editId = urlParams.get('edit');
+        let isEditMode = false;
+
+        // 편집 모드일 경우 기존 글 불러오기
+        if (editId) {
+            isEditMode = true;
+            const savedPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
+            const postToEdit = savedPosts.find(p => p.id === editId);
+
+            if (postToEdit) {
+                document.getElementById('page-title').textContent = '글 수정';
+                document.getElementById('post-title-input').value = postToEdit.title;
+                document.getElementById('post-body-input').value = postToEdit.content;
+
+                // 태그 체크
+                postToEdit.tags.forEach(tag => {
+                    const checkbox = document.getElementById(`tag-${tag}`);
+                    if (checkbox) checkbox.checked = true;
+                });
+
+                // 버튼 텍스트 변경
+                document.querySelector('.btn-submit').textContent = '수정하기';
+            }
+        }
+
+        // 글쓰기/수정 폼 제출
         document.getElementById('write-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -84,16 +111,31 @@
                 return;
             }
 
-            // localStorage에 새 글 저장
-            const newPost = {
-                title: title,
-                tags: selectedTags,
-                content: content,
-                date: new Date().toISOString()
-            };
-
             let savedPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
-            savedPosts.unshift(newPost);
+
+            if (isEditMode) {
+                // 수정 모드: 기존 글 업데이트
+                const index = savedPosts.findIndex(p => p.id === editId);
+                if (index !== -1) {
+                    savedPosts[index] = {
+                        ...savedPosts[index],
+                        title: title,
+                        tags: selectedTags,
+                        content: content
+                    };
+                }
+            } else {
+                // 새 글 작성
+                const newPost = {
+                    id: 'user-' + Date.now(),
+                    title: title,
+                    tags: selectedTags,
+                    content: content,
+                    date: new Date().toISOString()
+                };
+                savedPosts.unshift(newPost);
+            }
+
             localStorage.setItem('blogPosts', JSON.stringify(savedPosts));
 
             // 메인 페이지로 이동

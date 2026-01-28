@@ -216,6 +216,28 @@ function updateNavActive() {
     });
 }
 
+// 사용자 글인지 확인 (localStorage에 저장된 글)
+function isUserPost(post) {
+    const savedPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
+    return savedPosts.some(p => p.id === post.id);
+}
+
+// 글 삭제
+function deletePost(postId) {
+    if (!confirm('정말 이 글을 삭제하시겠습니까?')) return;
+
+    let savedPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
+    savedPosts = savedPosts.filter(p => p.id !== postId);
+    localStorage.setItem('blogPosts', JSON.stringify(savedPosts));
+
+    renderPostList();
+}
+
+// 글 수정 페이지로 이동
+function editPost(postId) {
+    window.location.href = `write.html?edit=${postId}`;
+}
+
 // 포스트 표시
 function showPost(post) {
     const postContent = document.getElementById('post-content');
@@ -225,9 +247,20 @@ function showPost(post) {
         `<span class="category-tag ${tag}">${categoryNames[tag]}</span>`
     ).join('');
 
+    // 사용자가 작성한 글인 경우 수정/삭제 버튼 표시
+    const actionsHtml = isUserPost(post) ? `
+        <div class="post-actions">
+            <button class="btn-edit" onclick="editPost('${post.id}')">수정</button>
+            <button class="btn-delete" onclick="deletePost('${post.id}')">삭제</button>
+        </div>
+    ` : '';
+
     postContent.innerHTML = `
         <div class="post-header">
-            <div class="post-tags">${tagsHtml}</div>
+            <div class="post-header-top">
+                <div class="post-tags">${tagsHtml}</div>
+                ${actionsHtml}
+            </div>
             <h1>${post.title}</h1>
             <div class="post-meta">
                 <span class="date">${formatDate(post.date)}</span>
