@@ -128,10 +128,22 @@ git push origin main</code></pre>
     }
 ];
 
+// 초기 데이터 마이그레이션 (처음 한 번만 실행)
+function initializePosts() {
+    if (!localStorage.getItem('blogInitialized')) {
+        const postsWithStringId = defaultPosts.map(post => ({
+            ...post,
+            id: 'default-' + post.id
+        }));
+        localStorage.setItem('blogPosts', JSON.stringify(postsWithStringId));
+        localStorage.setItem('blogInitialized', 'true');
+    }
+}
+
 // 포스트 데이터 가져오기
 function getPosts() {
-    let savedPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
-    return [...savedPosts, ...defaultPosts];
+    initializePosts();
+    return JSON.parse(localStorage.getItem('blogPosts') || '[]');
 }
 
 // 날짜 포맷팅
@@ -216,10 +228,9 @@ function updateNavActive() {
     });
 }
 
-// 사용자 글인지 확인 (localStorage에 저장된 글)
+// 모든 글 수정/삭제 가능 (localStorage에 저장됨)
 function isUserPost(post) {
-    const savedPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
-    return savedPosts.some(p => p.id === post.id);
+    return true;
 }
 
 // 글 삭제
